@@ -4,16 +4,17 @@ interface Props {
 	description: string;
 	icon: string;
 	gradient: 'blue' | 'purple';
+	comingSoon?: boolean; 
 }
 
-const { title, description, icon, gradient } = Astro.props;
+const { title, description, icon, gradient, comingSoon } = Astro.props;
 ---
 
 <div class={`product-card ${gradient}`}>
 	<div class="icon">{icon}</div>
 	<h2>{title}</h2>
 	<p>{description}</p>
-	<button>Explorar</button>
+	{!comingSoon && <button>Explorar</button>}
 </div>
 
 <style>

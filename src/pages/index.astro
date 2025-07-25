@@ -12,39 +12,52 @@ import PricingSection from '../components/PricingSection.astro';
 		<Hero />
 		<section class="products" id="productos">
 			<div class="section-header">
-				<h2>Productos</h2>
+				<h2>Nuestros Productos</h2>
 			</div>
 			<div class="products-grid">
 				<ProductCard
-					title="Tribunal de Defensa de la Libre Competencia"
-					description="Accede a resoluciones y jurisprudencia del Tribunal de Defensa de la Libre Competencia con nuestra avanzada plataforma de búsqueda impulsada por IA."
+					title="Libre Competencia"
+					description="Accede a la jurisprudencia del Tribunal de Defensa de la Libre Competencia y de la Fiscalía Nacional Económica, integrada con nuestra avanzada plataforma de búsqueda impulsada por IA."
 					icon="⚖️"
 					gradient="blue"
 				/>
 				<ProductCard
 					title="Laudos Arbitrales"
-					description="Explora nuestra extensa base de datos de laudos arbitrales con análisis predictivo y búsqueda semántica."
+					description="Explora nuestra extensa base de datos de laudos arbitrales del Centro de Arbitraje y Mediación, con análisis predictivo y búsqueda semántica."
 					icon="📜"
 					gradient="purple"
 				/>
+				<ProductCard
+					title="Derecho Civil"
+					description="Consulta la jurisprudencia civil de la Corte Suprema y las Cortes de Apelaciones de Chile, y accede a análisis detallados de sus casos relevantes."
+					icon="📘"
+					gradient="purple"
+				/>
+				<ProductCard
+					title="Derecho de Familia"
+					description="Realiza consultas jurídicas sobre el derecho de familia chileno y revisa la jurisprudencia administrativa y judicial relacionada."
+					icon="👨🏻‍🍼"
+					gradient="purple"
+				/>
+				<ProductCard
+					title="Derecho Tributario"
+					description="Consulta nuestra base de datos de derecho tributario y accede a análisis detallados de casos relevantes y respuestas del Servicio de Impuestos Internos."
+					icon="💵"
+					gradient="purple"
+				/>
+
+				<ProductCard
+					title="Próximamente"
+					description="¡Estamos trabajando en más soluciones para la industria legal!"
+					icon="🚀"
+					gradient="purple"
+					comingSoon={true}
+
+				/>
+
 			</div>
 		</section>
-		<section class="coming-soon">
-			<div class="section-header">
-				<h2>Próximamente nuevos productos</h2>
-			</div>
-			<div class="coming-soon-content">
-				<div class="blur-card">
-					<div class="gear-icon">
-						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-							<path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
-							<path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z" />
-						</svg>
-					</div>
-					<p>Estamos trabajando en nuevas soluciones innovadoras para transformar el sector legal</p>
-				</div>
-			</div>
-		</section>
+		
 		<PricingSection />
 	</main>
 </Layout>
