@@ -15,10 +15,10 @@ const { showBackButton = false, showIndexButton = false } = Astro.props;
 
     <div class="nav-actions">
       {showBackButton && (
-        <a href="/#productos" class="back-button">Volver</a>
+        <a href="javascript:history.back()" class="back-button">Volver</a>
       )}
       {showIndexButton && (
-      <a href="/#productos" class="index-button">Productos</a>
+      <a href="/#productos" class="index-button">Chats</a>
       <a href="/#planes" class="index-button">Planes</a>
       )}
 

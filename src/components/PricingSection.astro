@@ -13,10 +13,11 @@ import PricingCard from './PricingCard.astro';
 			price="Gratis"
 			features={[
 				"1 mes de prueba",
-				"Elige 2 Productos",
+				"Elige 2 Chats",
 				"1 usuario",
 				"Soporte por email"
 			]}
+			href="/inscripcion?plan=¡Haz la prueba!"
 		/>
 		<PricingCard
 			plan="Básico"
@@ -24,20 +25,22 @@ import PricingCard from './PricingCard.astro';
 			popular={true}
 			features={[
 				"100 consultas al mes",
-				"Todos los Productos",
+				"Todos los Chats",
 				"1 usuario",
 				"Soporte prioritario",
 			]}
+			href="/inscripcion?plan=Básico"
 		/>
 		<PricingCard
 			plan="Profesional"
 			price="5.990"
 			features={[
 				"Acceso ilimitado",
-				"Todos los Productos",
+				"Todos los Chats",
 				"1 usuario",
 				"Soporte prioritario",
 			]}
+			href="/inscripcion?plan=Profesional"
 		/>
 		<PricingCard
 			plan="Empresas"
@@ -45,7 +48,7 @@ import PricingCard from './PricingCard.astro';
 			features={[
 				"",
 				"Acceso ilimitado",
-				"Todos los Productos",
+				"Todos los Chats",
 				"Hasta 100 usuarios",
 				"Soporte personalizado",
 			]}

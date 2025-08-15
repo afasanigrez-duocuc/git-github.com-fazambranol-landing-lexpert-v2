@@ -4,9 +4,10 @@ interface Props {
 	price: string;
 	features: string[];
 	popular?: boolean;
+	href?: string;
 }
 
-const { plan, price, features, popular = false } = Astro.props;
+const { plan, price, features, popular = false, href } = Astro.props;
 ---
 
 <div class={`pricing-card ${popular ? 'popular' : ''}`}>
@@ -38,7 +39,13 @@ const { plan, price, features, popular = false } = Astro.props;
 			</li>
 		))}
 	</ul>
-	<button>Comenzar</button>
+
+	{href ? (
+		<a href={href}><button>Comenzar</button></a>
+	) : (
+  		<button disabled style="cursor: not-allowed; opacity: 0.6;">Comenzar</button>
+	)}
+
 </div>
 
 <style>
