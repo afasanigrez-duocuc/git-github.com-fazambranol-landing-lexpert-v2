@@ -6,8 +6,8 @@ import Hero from '../components/Hero.astro';
 import PricingSection from '../components/PricingSection.astro';
 ---
 
-<Layout title="LegalTech Solutions">
-	<Navigation />
+<Layout title="Lexpert IA">
+	<Navigation showBackButton={false} showIndexButton={true} />
 	<main>
 		<Hero />
 		<section class="products" id="productos">
@@ -15,35 +15,46 @@ import PricingSection from '../components/PricingSection.astro';
 				<h2>Nuestros Productos</h2>
 			</div>
 			<div class="products-grid">
+
 				<ProductCard
 					title="Libre Competencia"
 					description="Accede a la jurisprudencia del Tribunal de Defensa de la Libre Competencia y de la Fiscalía Nacional Económica, integrada con nuestra avanzada plataforma de búsqueda impulsada por IA."
 					icon="⚖️"
 					gradient="blue"
+					href="/librecompetencia"
 				/>
+
 				<ProductCard
 					title="Laudos Arbitrales"
 					description="Explora nuestra extensa base de datos de laudos arbitrales del Centro de Arbitraje y Mediación, con análisis predictivo y búsqueda semántica."
 					icon="📜"
 					gradient="purple"
+					href="/laudosarbitrales"
+
 				/>
+
 				<ProductCard
 					title="Derecho Civil"
 					description="Consulta la jurisprudencia civil de la Corte Suprema y las Cortes de Apelaciones de Chile, y accede a análisis detallados de sus casos relevantes."
 					icon="📘"
 					gradient="purple"
+					href="/derechocivil"
 				/>
+
 				<ProductCard
 					title="Derecho de Familia"
 					description="Realiza consultas jurídicas sobre el derecho de familia chileno y revisa la jurisprudencia administrativa y judicial relacionada."
 					icon="👨🏻‍🍼"
 					gradient="purple"
+					href="/derechofamilia"
 				/>
+
 				<ProductCard
 					title="Derecho Tributario"
 					description="Consulta nuestra base de datos de derecho tributario y accede a análisis detallados de casos relevantes y respuestas del Servicio de Impuestos Internos."
 					icon="💵"
 					gradient="purple"
+					href="/derechotributario"
 				/>
 
 				<ProductCard

@@ -4,54 +4,50 @@ import PricingCard from './PricingCard.astro';
 
 <section class="pricing" id="planes">
 	<div class="pricing-header">
-		<h2>Planes</h2>
+		<h2>Nuestros Planes</h2>
 		<p>Elige el plan que mejor se adapte a tus necesidades</p>
 	</div>
 	<div class="pricing-grid">
 		<PricingCard
 			plan="Gratis"
-			price="Gratis"
+			price="0"
 			features={[
-				"Acceso básico a resoluciones",
-				"Búsqueda simple",
+				"Primer mes de prueba",
+				"Busca en todos los Productos",
 				"1 usuario",
 				"Soporte por email"
 			]}
 		/>
 		<PricingCard
 			plan="Básico"
-			price="29"
+			price="2.990"
+			popular={true}
 			features={[
-				"Acceso completo a resoluciones",
-				"Búsqueda avanzada",
-				"3 usuarios",
+				"100 consultas al mes",
+				"Busca en todos los Productos",
+				"1 usuario",
 				"Soporte prioritario",
-				"Exportación PDF"
 			]}
 		/>
 		<PricingCard
 			plan="Profesional"
-			price="99"
-			popular={true}
+			price="5.990"
 			features={[
-				"Todo lo del plan Básico",
-				"Análisis predictivo",
-				"10 usuarios",
-				"Soporte 24/7",
-				"API access",
-				"Reportes personalizados"
+				"Acceso ilimitado",
+				"Busca en todos los Productos",
+				"1 usuario",
+				"Soporte prioritario",
 			]}
 		/>
 		<PricingCard
 			plan="Empresas"
-			price="299"
+			price="Pronto..."
 			features={[
-				"Todo lo del plan Profesional",
-				"Usuarios ilimitados",
-				"Integración personalizada",
-				"Account Manager dedicado",
-				"SLA garantizado",
-				"Hosting privado"
+				"",
+				"Acceso ilimitado",
+				"Busca en todos los Productos",
+				"Hasta 100 usuarios",
+				"Soporte personalizado",
 			]}
 		/>
 	</div>

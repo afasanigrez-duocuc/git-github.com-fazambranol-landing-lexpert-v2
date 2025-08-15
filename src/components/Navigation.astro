@@ -1,9 +1,27 @@
 ---
+interface Props {
+  showBackButton?: boolean;
+  showIndexButton?: boolean;
+}
+
+const { showBackButton = false, showIndexButton = false } = Astro.props;
+
 ---
+
 
 <nav>
   <div class="nav-container">
     <a href="/" class="logo">Lexpert AI</a>
+
+    <div class="nav-actions">
+      {showBackButton && (
+        <a href="/#productos" class="back-button">Volver</a>
+      )}
+      {showIndexButton && (
+      <a href="/#productos" class="index-button">Productos</a>
+      <a href="/#planes" class="index-button">Planes</a>
+      )}
+
     <button class="login-button">Iniciar sesión</button>
   </div>
 </nav>
@@ -57,4 +75,43 @@
     border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
   }
+
+    .back-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1.25rem;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .index-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1.25rem;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .index-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+  }
+
 </style>

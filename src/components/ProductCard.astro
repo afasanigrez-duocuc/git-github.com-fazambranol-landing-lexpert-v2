@@ -5,16 +5,22 @@ interface Props {
 	icon: string;
 	gradient: 'blue' | 'purple';
 	comingSoon?: boolean; 
+	href?: string;
 }
 
-const { title, description, icon, gradient, comingSoon } = Astro.props;
+const { title, description, icon, gradient, comingSoon, href } = Astro.props;
 ---
 
 <div class={`product-card ${gradient}`}>
 	<div class="icon">{icon}</div>
 	<h2>{title}</h2>
 	<p>{description}</p>
-	{!comingSoon && <button>Explorar</button>}
+	{!comingSoon && href ? (
+		<a href={href}><button>Explorar</button></a>
+	) : (
+		!comingSoon && <button>Explorar</button>
+	)}
+
 </div>
 
 <style>
