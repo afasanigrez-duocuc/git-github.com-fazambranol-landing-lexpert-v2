@@ -11,7 +11,7 @@ const { showBackButton = false, showIndexButton = false } = Astro.props;
 
 <nav>
   <div class="nav-container">
-    <a href="/" class="logo">Lexpert AI</a>
+    <a href="/#hero" class="logo">Lexpert AI</a>
 
     <div class="nav-actions">
       {showBackButton && (
@@ -56,6 +56,7 @@ const { showBackButton = false, showIndexButton = false } = Astro.props;
     background: linear-gradient(135deg, #fff, #86868b);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    transition: all 0.3s ease;
   }
 
   .login-button {
@@ -70,11 +71,11 @@ const { showBackButton = false, showIndexButton = false } = Astro.props;
     transition: all 0.3s ease;
   }
 
-  .login-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
-  }
+    .login-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+    }
 
     .back-button {
     background: rgba(255, 255, 255, 0.1);

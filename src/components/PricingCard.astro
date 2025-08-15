@@ -12,16 +12,18 @@ const { plan, price, features, popular = false } = Astro.props;
 <div class={`pricing-card ${popular ? 'popular' : ''}`}>
 	{popular && <span class="popular-badge">Más popular</span>}
 	<h3>{plan}</h3>
+
 	<div class="price">
 
-		{price === 'Pronto...' 
-		? <span class="coming-soon">{price}</span>
-		: <>
-			<span class="currency">$</span>
-			<span class="amount">{price}</span>
-			{price !== 'Gratis' && <span class="period">/mes</span>}
+		{price === 'Pronto...' || price === 'Gratis' ? (
+			<span class="coming-soon">{price}</span>
+		) : (
+			<>
+				<span class="currency">$</span>
+				<span class="amount">{price}</span>
+				{price !== 'Gratis' && <span class="period">/mes</span>}
 			</>
-		}
+		)}
 
 	</div>
 	<ul>
