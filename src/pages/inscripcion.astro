@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+import { createClient } from '@supabase/supabase-js';
 
 interface Props {
   plan?: string;
@@ -8,6 +9,10 @@ interface Props {
 
 const urlParams = new URLSearchParams(Astro.request.url.split('?')[1]);
 const plan = urlParams.get('plan') || 'Tu plan';
+
+const supabaseUrl = 'https://your-supabase-url.supabase.co';
+const supabaseKey = 'your-anon-key';
+const supabase = createClient(supabaseUrl, supabaseKey);
 ---
 
 <Layout title={`Inscripción - ${plan}`}>
@@ -16,9 +21,9 @@ const plan = urlParams.get('plan') || 'Tu plan';
   <main>
     <section class="signup">
       <h2>Inscribirse al plan: {plan}</h2>
-      <p>Completa tus datos para comenzar tu suscripción. Próximamente podrás pagar en línea.</p>
+      <p>Completa tus datos para comenzar tu suscripción.</p>
 
-      <form>
+      <form class="signup-form" id="signup-form">
         <label>
           Nombre:
           <input type="text" name="name" required />
@@ -31,6 +36,36 @@ const plan = urlParams.get('plan') || 'Tu plan';
 
         <button type="submit">Enviar inscripción</button>
       </form>
+
+      <script>
+        import { createClient } from '@supabase/supabase-js';
+
+        const supabaseUrl = 'https://your-supabase-url.supabase.co';
+        const supabaseKey = 'your-anon-key';
+        const supabase = createClient(supabaseUrl, supabaseKey);
+
+        const form = document.getElementById('signup-form') as HTMLFormElement;
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const formData = new FormData(form);
+          const name = formData.get('name');
+          const email = formData.get('email');
+          const plan = "{selectedPlan}"; 
+
+          const { data, error } = await supabase
+            .from('contracts')
+            .insert([{ name, email, plan }]);
+
+          if (error) {
+            alert('Hubo un error al registrar: ' + error.message);
+          } else {
+            alert('¡Inscripción enviada con éxito!');
+            form.reset();
+          }
+        });
+      </script>
+
     </section>
   </main>
 </Layout>

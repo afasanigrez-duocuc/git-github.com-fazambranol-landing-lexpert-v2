@@ -11,9 +11,10 @@ import PricingCard from './PricingCard.astro';
 		<PricingCard
 			plan="¡Haz la prueba!"
 			price="Gratis"
+			popular={true}
 			features={[
-				"1 mes de prueba",
-				"Elige 2 Chats",
+				"1 mes ilimitado",
+				"2 Chats a elección",
 				"1 usuario",
 				"Soporte por email"
 			]}
@@ -21,26 +22,23 @@ import PricingCard from './PricingCard.astro';
 		/>
 		<PricingCard
 			plan="Básico"
-			price="2.990"
-			popular={true}
+			price="Pronto..."
 			features={[
 				"100 consultas al mes",
 				"Todos los Chats",
 				"1 usuario",
 				"Soporte prioritario",
 			]}
-			href="/inscripcion?plan=Básico"
 		/>
 		<PricingCard
 			plan="Profesional"
-			price="5.990"
+			price="Pronto..."
 			features={[
 				"Acceso ilimitado",
 				"Todos los Chats",
 				"1 usuario",
 				"Soporte prioritario",
 			]}
-			href="/inscripcion?plan=Profesional"
 		/>
 		<PricingCard
 			plan="Empresas"
