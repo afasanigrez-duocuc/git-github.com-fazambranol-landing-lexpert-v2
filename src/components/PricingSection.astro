@@ -9,46 +9,44 @@ import PricingCard from './PricingCard.astro';
 	</div>
 	<div class="pricing-grid">
 		<PricingCard
-			plan="¡Haz la prueba!"
+			plan="¡Pruébanos!"
 			price="Gratis"
 			popular={true}
 			features={[
-				"1 mes ilimitado",
-				"2 Chats a elección",
+				"Versión beta",
+				"Acceso ilimitado",
 				"1 usuario",
-				"Soporte por email"
 			]}
-			href="/inscripcion?plan=¡Haz la prueba!"
+			href="/inscripcion?plan=¡Pruébanos!"
 		/>
 		<PricingCard
 			plan="Básico"
 			price="Pronto..."
+			popular={false}
 			features={[
-				"100 consultas al mes",
 				"Todos los Chats",
+				"Límite mensual",
 				"1 usuario",
-				"Soporte prioritario",
 			]}
 		/>
 		<PricingCard
 			plan="Profesional"
 			price="Pronto..."
+			popular={false}
 			features={[
-				"Acceso ilimitado",
 				"Todos los Chats",
+				"Acceso ilimitado",
 				"1 usuario",
-				"Soporte prioritario",
 			]}
 		/>
 		<PricingCard
 			plan="Empresas"
 			price="Pronto..."
+			popular={false}	
 			features={[
-				"",
-				"Acceso ilimitado",
 				"Todos los Chats",
-				"Hasta 100 usuarios",
-				"Soporte personalizado",
+				"Acceso ilimitado",
+				"100+ usuarios",
 			]}
 		/>
 	</div>
