@@ -8,7 +8,7 @@ interface Props {
 }
 
 const urlParams = new URLSearchParams(Astro.request.url.split('?')[1]);
-const plan = urlParams.get('plan') || 'Tu plan';
+const plan = urlParams.get('plan') || '' ;
 
 const supabaseUrl = 'https://your-supabase-url.supabase.co';
 const supabaseKey = 'your-anon-key';
@@ -20,21 +20,49 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   
   <main>
     <section class="signup">
-      <h2>Inscribirse al plan: {plan}</h2>
-      <p>Completa tus datos para comenzar tu suscripción.</p>
+      <h2>Regístrate: {plan}</h2>
+      <p>Completa tus datos para recibir las actualizaciones de Lexpert AI</p>
 
-      <form class="signup-form" id="signup-form">
-        <label>
-          Nombre:
-          <input type="text" name="name" required />
-        </label>
+      <form id="beta-form" class="beta-form">
+        <div class="form-group">
+          <label for="firstName">Nombres</label>
+          <input type="text" id="firstName" name="firstName" required />
+        </div>
 
-        <label>
-          Email:
-          <input type="email" name="email" required />
-        </label>
+        <div class="form-group">
+          <label for="lastName">Apellidos</label>
+          <input type="text" id="lastName" name="lastName" required />
+        </div>
 
-        <button type="submit">Enviar inscripción</button>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input type="tel" id="phone" name="phone" />
+        </div>
+
+        <div class="form-group">
+          <label>¿Deseas recibir novedades?</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="newsletter" value="si" checked /> Sí
+            </label>
+            <label>
+              <input type="radio" name="newsletter" value="no" /> No
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="comments">Comentarios</label>
+          <textarea id="comments" name="comments" rows="6"></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Enviar</button>
+        <p id="form-message" class="form-message"></p>
       </form>
 
       <script>
@@ -79,17 +107,29 @@ const supabase = createClient(supabaseUrl, supabaseKey);
   text-align: center;
 }
 
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.submit-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 200px;
+  text-align: center;
+  border-radius: 15px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: center;
+}
+
 .signup h2 {
   font-size: clamp(2rem, 5vw, 3rem);
   background: linear-gradient(135deg, #fff, #86868b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 1rem;
-}
-
-.signup p {
-  margin-bottom: 2rem;
-  color: #86868b;
 }
 
 form {
@@ -119,4 +159,55 @@ button:hover {
   background: rgba(255, 255, 255, 0.2);
   border-color: rgba(255, 255, 255, 0.2);
 }
+
+.beta-form {
+  max-width: 500px;
+  margin: 1rem auto;
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.3rem;
+  font-weight: 300;
+  margin-left: 0.5rem;
+  text-align: left;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+}
+
+.radio-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.submit-btn {
+  display: block;
+  width: 80%;
+  margin: 0.1rem auto 0;
+  padding: 0.7rem;
+  border: none;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #fff, #86868b);
+  color: #000;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 </style>
