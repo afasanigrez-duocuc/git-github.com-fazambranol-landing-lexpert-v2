@@ -42,7 +42,6 @@ supabase.auth.onAuthStateChange((event, session) => {
   </div>
 </nav>
 
-
 <div id="login-modal" class="modal">
   <div class="modal-content">
     <span class="close" id="close-modal">&times;</span>
@@ -84,17 +83,58 @@ window.addEventListener('DOMContentLoaded', async () => {
 
   // Función que actualiza el estado del botón según si hay sesión
   function updateButton(session) {
+
+    let existingDropdown = document.getElementById('logout-dropdown');
+    if (existingDropdown) existingDropdown.remove();
+
+    const btn = document.getElementById('login-btn');
+
     if (session) {
-      // Usuario logueado -> mostrar usuario
-      btn.textContent = `${session.user.email}`;
-      btn.onclick = async (e) => {
-        e?.preventDefault?.();
-        const { error } = await supabase.auth.signOut();
-        if (error) console.error('signOut error', error);
-        // cambiar UI
-        modal && (modal.style.display = 'none');
-        updateButton(null);
-      };
+    // Usuario logueado -> mostrar email
+    btn.textContent = session.user.email;
+    btn.style.position = 'relative'; 
+
+    // Crear dropdown
+    const dropdown = document.createElement('div');
+    dropdown.id = 'logout-dropdown';
+    dropdown.style.position = 'absolute';
+    dropdown.style.top = '100%';
+    dropdown.style.right = '2.1rem';
+    dropdown.style.background = '#1a1a1a';
+    dropdown.style.color = '#fff';
+    dropdown.style.padding = '0.5rem 1rem';
+    dropdown.style.borderRadius = '0.5rem';
+    dropdown.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+    dropdown.style.display = 'none';
+    dropdown.style.whiteSpace = 'nowrap';
+    dropdown.style.zIndex = '1000';
+    dropdown.style.cursor = 'pointer';
+    dropdown.textContent = 'Cerrar sesión';
+
+    // Añadir al DOM
+    btn.parentElement.appendChild(dropdown);
+
+    // Mostrar/ocultar dropdown al hacer click en el email
+    btn.onclick = (e) => {
+      e.preventDefault();
+      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    };
+
+    // Cerrar sesión al hacer click en el dropdown
+    dropdown.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const { error } = await supabase.auth.signOut();
+      if (error) console.error('signOut error', error);
+      updateButton(null);
+    });
+
+    // Cerrar dropdown al hacer click fuera
+    window.addEventListener('click', (e) => {
+      if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
     } else {
       // No hay sesión -> mostrar "Iniciar sesión" y abrir modal
       btn.textContent = 'Iniciar sesión';
@@ -134,10 +174,16 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (googleLogin) {
     googleLogin.addEventListener('click', async (e) => {
       e.preventDefault();
+
+      // Si estamos en la página principal (home), redirigir a origin; sino, a la URL completa actual
+      const isHome = window.location.pathname === '/' || window.location.pathname === '';
+      const redirectTo = isHome ? window.location.origin : window.location.href;
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: window.location.href },
+        options: { redirectTo },
       });
+
       if (error) {
         console.error('[login] OAuth error', error);
         alert('Error al iniciar con Google: ' + error.message);
@@ -147,6 +193,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     });
   }
 });
+
 </script>
 
 
