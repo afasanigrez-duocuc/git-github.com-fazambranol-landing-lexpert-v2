@@ -1,10 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
+
+import { supabase } from '../lib/supabaseClient.js';
+const { data } = await supabase.auth.getSession();
+const session = data.session;
+
 ---
 
 <Layout title="Lexpert IA - Derecho Civil">
-  <Navigation showBackButton={true} />
+  <Navigation showBackButton={true} 
+  showLoginButton={true} />
   
   <main class="chat-page">
 
@@ -12,8 +18,10 @@ import Navigation from '../components/Navigation.astro';
       <h1>Derecho Civil</h1>
     </header>
 
-    <section class="chat-container">
+    <section id="chat-content" class="chat-container">
+
         <!-- Contenedor del chat -->
+
     </section>
 
     <div style="flex-shrink:0; height:4rem;"></div>
@@ -25,6 +33,43 @@ import Navigation from '../components/Navigation.astro';
 
   </main>
 </Layout>
+
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://qqqnidhebjcsjzcgbhzr.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcW5pZGhlYmpjc2p6Y2diaHpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjcyMzIsImV4cCI6MjA3Mzc0MzIzMn0.O6wOJ6IiwKORDWZ0wAtgDfe9z6_BnjN87J07kmMTb-M';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+const chatContent = document.getElementById('chat-content');
+
+async function checkSession() {
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (session) {
+    chatContent.innerHTML = `
+      <h1>Bienvenido al Chat</h1>
+      <p>Solo usuarios logueados pueden ver esto.</p>
+      <p>Email: ${session.user.email}</p>
+    `;
+  } else {
+    chatContent.innerHTML = `
+      <h2 class="text-2xl font-bold">Debes iniciar sesión para acceder a este contenido.</h2>
+      <p>Haz clic en <strong>"Iniciar sesión"</strong> en el menú superior para continuar.</p>
+    `;
+  }
+}
+
+// Ejecutar al cargar la página
+checkSession();
+
+// Escuchar cambios de sesión en tiempo real
+supabase.auth.onAuthStateChange((_event, session) => {
+  checkSession();
+});
+</script>
+
 
 <style>
 .chat-page {

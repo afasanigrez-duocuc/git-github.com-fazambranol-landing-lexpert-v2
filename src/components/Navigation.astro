@@ -1,30 +1,154 @@
 ---
-interface Props {
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabaseClient';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+export interface Props {
   showBackButton?: boolean;
   showIndexButton?: boolean;
+  showLoginButton?: boolean;
 }
 
-const { showBackButton = false, showIndexButton = false } = Astro.props;
+const { showBackButton = false, showIndexButton = false, showLoginButton = false } = Astro.props;
 
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log("Auth event:", event, session);
+  if (session) {
+    // Aquí puedes actualizar tu UI o guardar el usuario en un store
+  }
+});
 ---
-
 
 <nav>
   <div class="nav-container">
     <a href="/#hero" class="logo">Lexpert AI</a>
-
     <div class="nav-actions">
       {showBackButton && (
-        <a href="javascript:history.back()" class="back-button">Volver</a>
+        <a href="/#hero" class="back-button">Inicio</a>
       )}
       {showIndexButton && (
-      <a href="/#productos" class="index-button">Chats</a>
-      <a href="/#planes" class="index-button">Planes</a>
+        <>
+          <a href="/#productos" class="index-button">Chats</a>
+          <a href="/#planes" class="index-button">Planes</a>
+        </>
+      )}
+      {showLoginButton && (
+        <>
+          <a href="#" id="login-btn" class="index-button">Iniciar sesión</a>
+        </>
       )}
 
-    <button class="login-button">Iniciar sesión</button>
+    </div>
   </div>
 </nav>
+
+
+<div id="login-modal" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-modal">&times;</span>
+    <h2 class="modal-title">Iniciar sesión</h2>
+    <button id="google-login" class="google-btn">
+      <span class="google-icon">
+        <svg width="22" height="22" viewBox="0 0 48 48">
+          <g>
+            <path fill="#4285F4" d="M43.6 20.5h-1.9V20H24v8h11.3c-1.6 4.3-5.7 7.5-10.3 7.5-6.1 0-11-4.9-11-11s4.9-11 11-11c2.6 0 5 .9 6.9 2.4l6.1-6.1C36.1 7.6 30.4 5 24 5 12.9 5 4 13.9 4 25s8.9 20 20 20c11 0 20-8.9 20-20 0-1.3-.1-2.7-.4-4z"/>
+            <path fill="#34A853" d="M6.3 14.1l6.6 4.8C15.2 16.1 19.3 13 24 13c2.6 0 5 .9 6.9 2.4l6.1-6.1C36.1 7.6 30.4 5 24 5c-7.2 0-13.4 4.1-16.7 10.1z"/>
+            <path fill="#FBBC05" d="M24 44c6.1 0 11.2-2 14.9-5.4l-6.9-5.7c-2 1.4-4.5 2.2-8 2.2-4.6 0-8.7-3.2-10.3-7.5l-6.6 5.1C10.6 39.9 16.8 44 24 44z"/>
+            <path fill="#EA4335" d="M43.6 20.5h-1.9V20H24v8h11.3c-1.1 3-3.6 5.5-6.9 6.7l6.9 5.7c4.1-3.8 6.7-9.4 6.7-15.9 0-1.3-.1-2.7-.4-4z"/>
+          </g>
+        </svg>
+      </span>
+      <span class="google-text">Continuar con Google</span>
+    </button>
+  </div>
+</div>
+
+
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://qqqnidhebjcsjzcgbhzr.supabase.co';
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcW5pZGhlYmpjc2p6Y2diaHpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjcyMzIsImV4cCI6MjA3Mzc0MzIzMn0.O6wOJ6IiwKORDWZ0wAtgDfe9z6_BnjN87J07kmMTb-M';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const btn = document.getElementById('login-btn');
+  const modal = document.getElementById('login-modal');
+  const close = document.getElementById('close-modal');
+  const googleLogin = document.getElementById('google-login');
+
+  if (!btn) {
+    console.error('[login] no se encontró elemento #login-btn');
+    return;
+  }
+
+  // Función que actualiza el estado del botón según si hay sesión
+  function updateButton(session) {
+    if (session) {
+      // Usuario logueado -> mostrar usuario
+      btn.textContent = `${session.user.email}`;
+      btn.onclick = async (e) => {
+        e?.preventDefault?.();
+        const { error } = await supabase.auth.signOut();
+        if (error) console.error('signOut error', error);
+        // cambiar UI
+        modal && (modal.style.display = 'none');
+        updateButton(null);
+      };
+    } else {
+      // No hay sesión -> mostrar "Iniciar sesión" y abrir modal
+      btn.textContent = 'Iniciar sesión';
+      btn.onclick = (e) => {
+        e?.preventDefault?.();
+        if (modal) modal.style.display = 'flex';
+      };
+    }
+  }
+
+  // Obtenemos la sesión inicial correctamente (destructuring correcto)
+  try {
+    const { data: { session } = {} } = await supabase.auth.getSession();
+    console.log('[login] sesión inicial:', session ?? 'ninguna');
+    updateButton(session ?? null);
+  } catch (err) {
+    console.error('[login] error getSession', err);
+    updateButton(null);
+  }
+
+  // Escuchamos cambios de sesión (login/logout)
+  supabase.auth.onAuthStateChange((event, session) => {
+    console.log('[login] onAuthStateChange', event, session);
+    updateButton(session ?? null);
+    if (session && modal) modal.style.display = 'none';
+  });
+
+  // Cerrar modal: botón X
+  if (close) close.addEventListener('click', () => modal && (modal.style.display = 'none'));
+
+  // Cerrar modal al hacer click fuera del contenido
+  window.addEventListener('click', (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  });
+
+  // Botón Login con Google
+  if (googleLogin) {
+    googleLogin.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.href },
+      });
+      if (error) {
+        console.error('[login] OAuth error', error);
+        alert('Error al iniciar con Google: ' + error.message);
+      } else {
+        console.log('[login] OAuth iniciado...');
+      }
+    });
+  }
+});
+</script>
+
 
 <style>
   nav {
@@ -114,5 +238,131 @@ const { showBackButton = false, showIndexButton = false } = Astro.props;
     border-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-1px);
   }
+
+  .login-link {
+    color: #60a5fa;
+    font-weight: 600;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    background: linear-gradient(135deg, rgba(96,165,250,0.12), rgba(167,139,250,0.12));
+    transition: background 0.2s, color 0.2s;
+    text-decoration: none;
+  }
+  .login-link:hover {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    color: #fff;
+  }
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-content {
+    background: #18181b;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    padding: 2.5rem 2rem 2rem 2rem;
+    width: 90%;
+    max-width: 370px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1.5px solid rgba(96,165,250,0.18);
+  }
+  .close {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.3rem;
+    font-size: 2rem;
+    color: #86868b;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .close:hover {
+    color: #60a5fa;
+  }
+  .modal-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .login-form input {
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: #23232b;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    border: 1.5px solid rgba(96,165,250,0.18);
+    transition: border 0.2s;
+  }
+  .login-form input:focus {
+    border: 1.5px solid #60a5fa;
+  }
+  .login-form button {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 0.9rem 0;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+  }
+  .login-form button:hover {
+    background: linear-gradient(135deg, #3b82f6, #a78bfa);
+  }
+
+  .google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7em;
+    width: 100%;
+    padding: 0.8em 0;
+    background: #fff;
+    color: #18181b;
+    font-weight: 600;
+    font-size: 1.08rem;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.07);
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-top: 0.1rem;
+  }
+  .google-btn:hover {
+    background: #f3f4f6;
+    box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.13);
+  }
+  .google-icon {
+    display: flex;
+    align-items: center;
+    height: 22px;
+  }
+  .google-text {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
 
 </style>
