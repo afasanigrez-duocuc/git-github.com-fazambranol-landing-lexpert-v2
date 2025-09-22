@@ -213,28 +213,50 @@ window.addEventListener('DOMContentLoaded', async () => {
       .single();
 
     if (queryError || !registered) {
+      // Crear contenedor de mensaje
       const messageDiv = document.createElement('div');
-      messageDiv.textContent = 'Para acceder, primero debes registrarte.';
       messageDiv.style.position = 'fixed';
-      messageDiv.style.top = '23%';
+      messageDiv.style.top = '40%';
       messageDiv.style.left = '50%';
       messageDiv.style.transform = 'translate(-50%, -50%)';
-      messageDiv.style.padding = '1rem 2rem';
-      messageDiv.style.background = 'rgba(50, 50, 50, 0.95)';
+      messageDiv.style.padding = '1.5rem 2rem';
+      messageDiv.style.background = 'rgba(50, 50, 50, 0.95)'; 
       messageDiv.style.color = '#fff';
       messageDiv.style.fontWeight = '700';
       messageDiv.style.fontSize = '1.2rem';
       messageDiv.style.border = '2px solid #fff';
       messageDiv.style.borderRadius = '12px';
-      messageDiv.style.boxShadow = '0 8px 20px rgba(0,0,0,0.4)';
+      messageDiv.style.boxShadow = '0 8px 20px rgba(0,0,0,0.5)';
       messageDiv.style.zIndex = '10000';
+      messageDiv.style.textAlign = 'center';
+
+      // Texto de alerta
+      const text = document.createElement('p');
+      text.textContent = 'Primero debes completar el formulario';
+      text.style.marginBottom = '1rem';
+      messageDiv.appendChild(text);
+
+      // Botón de registro
+      const button = document.createElement('button');
+      button.textContent = 'Registro';
+      button.style.padding = '0.6rem 1.2rem';
+      button.style.borderRadius = '8px';
+      button.style.border = 'none';
+      button.style.background = 'linear-gradient(135deg, #fff, #86868b)';
+      button.style.color = '#000';
+      button.style.fontWeight = '700';
+      button.style.cursor = 'pointer';
+      button.addEventListener('click', () => {
+        // Redirigir al formulario
+        window.location.href = `/inscripcion?email=${encodeURIComponent(email)}`;
+      });
+      messageDiv.appendChild(button);
+
+      // Añadir al DOM
       document.body.appendChild(messageDiv);
 
-      // Redirigir al formulario luego de 1.6 segundos
-      setTimeout(() => {
-        messageDiv.remove();
-        window.location.href = `/inscripcion?email=${encodeURIComponent(email)}`;
-      }, 1600);
+      // Cerrar sesión temporalmente
+      await supabase.auth.signOut();
 
       return;
     }
