@@ -8,20 +8,20 @@ interface Props {
 }
 
 const urlParams = new URLSearchParams(Astro.request.url.split('?')[1]);
-const plan = urlParams.get('plan') || '' ;
+const plan = urlParams.get('plan') || '';
 
-const supabaseUrl = 'https://your-supabase-url.supabase.co';
-const supabaseKey = 'your-anon-key';
+const supabaseUrl = 'https://qqqnidhebjcsjzcgbhzr.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcW5pZGhlYmpjc2p6Y2diaHpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjcyMzIsImV4cCI6MjA3Mzc0MzIzMn0.O6wOJ6IiwKORDWZ0wAtgDfe9z6_BnjN87J07kmMTb-M';
 const supabase = createClient(supabaseUrl, supabaseKey);
 ---
 
 <Layout title={`Inscripción - ${plan}`}>
   <Navigation showBackButton={true} />
-  
+
   <main>
     <section class="signup">
       <h2>Regístrate: {plan}</h2>
-      <p>Completa tus datos para recibir las actualizaciones de Lexpert AI</p>
+      <p>Completa tus datos para ser parte de Lexpert AI</p>
 
       <form id="beta-form" class="beta-form">
         <div class="form-group">
@@ -47,12 +47,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
         <div class="form-group">
           <label>¿Deseas recibir novedades?</label>
           <div class="radio-group">
-            <label>
-              <input type="radio" name="newsletter" value="si" checked /> Sí
-            </label>
-            <label>
-              <input type="radio" name="newsletter" value="no" /> No
-            </label>
+            <label><input type="radio" name="newsletter" value="true" checked> Sí</label>
+            <label><input type="radio" name="newsletter" value="false"> No</label>
           </div>
         </div>
 
@@ -65,38 +61,53 @@ const supabase = createClient(supabaseUrl, supabaseKey);
         <p id="form-message" class="form-message"></p>
       </form>
 
-      <script>
-        import { createClient } from '@supabase/supabase-js';
+      <script type="module">
+      import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
 
-        const supabaseUrl = 'https://your-supabase-url.supabase.co';
-        const supabaseKey = 'your-anon-key';
-        const supabase = createClient(supabaseUrl, supabaseKey);
+      const supabaseUrl = 'https://qqqnidhebjcsjzcgbhzr.supabase.co';
+      const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFxcW5pZGhlYmpjc2p6Y2diaHpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgxNjcyMzIsImV4cCI6MjA3Mzc0MzIzMn0.O6wOJ6IiwKORDWZ0wAtgDfe9z6_BnjN87J07kmMTb-M';
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-        const form = document.getElementById('signup-form') as HTMLFormElement;
-        form.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          
-          const formData = new FormData(form);
-          const name = formData.get('name');
-          const email = formData.get('email');
-          const plan = "{selectedPlan}"; 
+      const form = document.getElementById('beta-form');
+      const messageEl = document.getElementById('form-message');
 
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const first_name = document.getElementById('firstName').value;
+        const last_name = document.getElementById('lastName').value;
+        const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
+        const newsletter = document.querySelector('input[name="newsletter"]:checked').value === 'true';
+        const comments = document.getElementById('comments').value;
+
+        try {
           const { data, error } = await supabase
-            .from('contracts')
-            .insert([{ name, email, plan }]);
+            .from('beta_signups')
+            .insert([{ first_name, last_name, email, phone, newsletter, comments }]);
 
-          if (error) {
-            alert('Hubo un error al registrar: ' + error.message);
-          } else {
-            alert('¡Inscripción enviada con éxito!');
-            form.reset();
-          }
-        });
+          if (error) throw error;
+
+          messageEl.textContent = '¡Registro completado con éxito!';
+          messageEl.style.color = 'white';
+          form.reset();
+
+          setTimeout(() => {
+          window.location.href = '/';
+          }, 2000);
+
+        } catch (err) {
+          console.error('Error al registrar:', err);
+          messageEl.textContent = 'Ocurrió un error. Intenta nuevamente.';
+          messageEl.style.color = 'red';
+        }
+      });
       </script>
 
     </section>
   </main>
 </Layout>
+
 
 <style>
 .signup {
@@ -185,11 +196,12 @@ button:hover {
 
 .form-group input,
 .form-group textarea {
-  padding: 0.5rem;
+  padding: 0.6rem;
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.2);
   background: rgba(0,0,0,0.5);
   color: #fff;
+  font-size: 0.9rem;
 }
 
 .radio-group {
@@ -200,7 +212,7 @@ button:hover {
 .submit-btn {
   display: block;
   width: 80%;
-  margin: 0.1rem auto 0;
+  margin: 0rem auto 0;
   padding: 0.7rem;
   border: none;
   border-radius: 7px;
@@ -208,6 +220,7 @@ button:hover {
   color: #000;
   font-weight: 700;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
 </style>

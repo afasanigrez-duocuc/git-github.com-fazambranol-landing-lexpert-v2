@@ -170,30 +170,83 @@ window.addEventListener('DOMContentLoaded', async () => {
     if (e.target === modal) modal.style.display = 'none';
   });
 
+
   // Botón Login con Google
   if (googleLogin) {
-    googleLogin.addEventListener('click', async (e) => {
-      e.preventDefault();
+  googleLogin.addEventListener('click', async (e) => {
+    e.preventDefault();
 
-      // Si estamos en la página principal (home), redirigir a origin; sino, a la URL completa actual
-      const isHome = window.location.pathname === '/' || window.location.pathname === '';
-      const redirectTo = isHome ? window.location.origin : window.location.href;
+    const isHome = window.location.pathname === '/' || window.location.pathname === '';
+    const redirectTo = isHome ? window.location.origin : window.location.href;
 
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: { redirectTo },
-      });
-
-      if (error) {
-        console.error('[login] OAuth error', error);
-        alert('Error al iniciar con Google: ' + error.message);
-      } else {
-        console.log('[login] OAuth iniciado...');
-      }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo },
     });
+
+    if (error) {
+      console.error('[login] OAuth error', error);
+      alert('Error al iniciar con Google: ' + error.message);
+      return;
+    }
+
+    console.log('[login] OAuth iniciado, esperando sesión...');
+  });
+}
+
+  // Escuchar cambios de sesión
+  supabase.auth.onAuthStateChange(async (event, session) => {
+  console.log('[login] onAuthStateChange', event, session);
+
+  if (!session) {
+    updateButton(null);
+    return;
   }
+
+  const email = session.user.email;
+
+    // Verificamos si el email está registrado en beta_signups
+    const { data: registered, error: queryError } = await supabase
+      .from('beta_signups')
+      .select('email')
+      .eq('email', email)
+      .single();
+
+    if (queryError || !registered) {
+      const messageDiv = document.createElement('div');
+      messageDiv.textContent = 'Para acceder, primero debes registrarte.';
+      messageDiv.style.position = 'fixed';
+      messageDiv.style.top = '23%';
+      messageDiv.style.left = '50%';
+      messageDiv.style.transform = 'translate(-50%, -50%)';
+      messageDiv.style.padding = '1rem 2rem';
+      messageDiv.style.background = 'rgba(50, 50, 50, 0.95)';
+      messageDiv.style.color = '#fff';
+      messageDiv.style.fontWeight = '700';
+      messageDiv.style.fontSize = '1.2rem';
+      messageDiv.style.border = '2px solid #fff';
+      messageDiv.style.borderRadius = '12px';
+      messageDiv.style.boxShadow = '0 8px 20px rgba(0,0,0,0.4)';
+      messageDiv.style.zIndex = '10000';
+      document.body.appendChild(messageDiv);
+
+      // Redirigir al formulario luego de 1.6 segundos
+      setTimeout(() => {
+        messageDiv.remove();
+        window.location.href = `/inscripcion?email=${encodeURIComponent(email)}`;
+      }, 1600);
+
+      return;
+    }
+
+    // Usuario registrado: mostrar email con dropdown
+    updateButton(session);
+    if (modal) modal.style.display = 'none';
+
 });
 
+
+});
 </script>
 
 
